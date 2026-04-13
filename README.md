@@ -27,14 +27,5 @@ npm run dev
 
 ---
 
-## Guía de Demo
-
-1. **Abrir** http://localhost:3000 → Dashboard con resumen general
-2. **Empresas**: Ver las 2 empresas de ejemplo. Cambiar empresa activa desde el selector superior
-3. **Productos**: CRUD completo — crear, editar, ver detalle, eliminar. Filtrado por empresa
-4. **Categorías**: Gestión de categorías por empresa
-5. **Sucursales**: Locales asociados a cada empresa
-6. **Proveedores**: Gestión de proveedores
-7. **Clientes**: Registro de clientes con límite de crédito
-8. **Empleados**: Personal asociado a empresa
-9. **Stock**: Inventario por sucursal y producto
+Guia
+realizar los comandos mencionados anteriormente o npm run dev en el root y abrir localhost puerto 3000
