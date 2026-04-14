@@ -23,6 +23,12 @@ export class Producto {
   @Column({ type: 'boolean', default: true })
   activo: boolean;
 
+  @Column({ type: 'boolean', default: false })
+  eliminado: boolean;
+
+  @Column({ type: 'datetime', nullable: true })
+  fechaEliminacion?: Date | null;
+
   // Campos de compatibilidad para referencias tipadas en entidades legacy.
   empresa?: unknown;
   categoriaRel?: unknown;

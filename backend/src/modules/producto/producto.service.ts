@@ -14,13 +14,14 @@ export class ProductoService {
 
   async findAll(): Promise<Producto[]> {
     return this.repo.find({
+      where: { eliminado: false },
       order: { nombre: 'ASC' },
     });
   }
 
   async findOne(id: string): Promise<Producto> {
     const producto = await this.repo.findOne({
-      where: { idProducto: id },
+      where: { idProducto: id, eliminado: false },
     });
     if (!producto) throw new NotFoundException(`Producto ${id} no encontrado`);
     return producto;
@@ -28,7 +29,7 @@ export class ProductoService {
 
   async create(dto: CreateProductoDto): Promise<Producto> {
     const existing = await this.repo.findOne({
-      where: { codigo: dto.codigo },
+      where: { codigo: dto.codigo, eliminado: false },
     });
     if (existing) {
       throw new BadRequestException(`Ya existe un producto con el código ${dto.codigo}`);
@@ -36,6 +37,8 @@ export class ProductoService {
     const producto = this.repo.create({
       idProducto: uuid(),
       activo: true,
+      eliminado: false,
+      fechaEliminacion: null,
       ...dto,
     });
     return this.repo.save(producto);
@@ -45,7 +48,7 @@ export class ProductoService {
     const producto = await this.findOne(id);
     if (dto.codigo) {
       const existing = await this.repo.findOne({
-        where: { codigo: dto.codigo },
+        where: { codigo: dto.codigo, eliminado: false },
       });
       if (existing && existing.idProducto !== id) {
         throw new BadRequestException(`Ya existe un producto con el código ${dto.codigo}`);
@@ -57,7 +60,10 @@ export class ProductoService {
 
   async remove(id: string): Promise<void> {
     const producto = await this.findOne(id);
-    await this.repo.remove(producto);
+    producto.eliminado = true;
+    producto.activo = false;
+    producto.fechaEliminacion = new Date();
+    await this.repo.save(producto);
   }
 
   async toggleActive(id: string): Promise<Producto> {
